@@ -166,7 +166,7 @@ export const TodoList = () => {
           }}
           value={list[current] && list[current].content ? list[current].content : ''}
           autoFocus
-        />}
+        />
       </div>
     </div>
   );
