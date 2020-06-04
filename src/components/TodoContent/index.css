@@ -1,0 +1,8 @@
+.todo-content {
+  flex: 1;
+  width: 100% ;
+}
+.todo-content .ant-input {
+  width: 100% !important;
+  height: 100% !important;
+}
