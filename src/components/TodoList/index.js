@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { List, Button, Input, Checkbox } from "antd";
+import { List, Button, Input, Checkbox, Empty } from "antd";
 import {TodoContent} from '../TodoContent'
 import "./index.css";
 
@@ -26,11 +26,11 @@ export const TodoList = () => {
   };
 
   const HeaderBtn = () => {
-    return <>
+    return <div style={{display: 'flex',justifyContent: 'space-between'}}>
     <Button type='primary' disabled={list.some((v) => v.edit)} onClick={() => addItem()}>新建</Button>
     <Button onClick={() => {store.clear();setList([])}}>清空</Button>
     {/* <Button onClick={() => {console.log(store.get())}}>look all</Button> */}
-    </>;
+    </div>;
   };
 
   const RenderItem = (item, index) => {
@@ -109,12 +109,16 @@ export const TodoList = () => {
         <List
           header={HeaderBtn()}
           dataSource={list}
+          locale={{emptyText: <div>还没有添加备忘哦...<br />^v^</div>}}
           renderItem={(item, index) => (
             <List.Item
               onClick={() => {
                 setCurrent(index)
               }}
               onDoubleClick={() => {
+                if(item.finshed) {
+                  return
+                }
                 const newList = list.map((v, i) => {
                   if (i === index) {
                     v.edit = true;
@@ -125,8 +129,7 @@ export const TodoList = () => {
               }}
             >
               <div className={index === current ? "current item" : "item"}>
-              {/* ({index + 1} - {current}) */}
-              {item.edit ? RenderItem(item, index) : <div className={item.finshed ? "finshed" : ""}>
+              {item.edit ? RenderItem(item, index) : <div className={item.finshed ? "finshed text" : "text"}>
                 <Checkbox checked={item.finshed} onChange={e => {
                   const newList = list.map((v, i) => {
                     if (i === index) {
@@ -137,18 +140,21 @@ export const TodoList = () => {
                   setList(newList);
                   store.set(`files`, newList);
                 }} />
+                <div className="title">
                 {item.title}
+                </div>
                 </div>}
               </div>
             </List.Item>
           )}
         />
       </div>
-      <div className="todo-content">
+      <div className={list[current] && list[current].finshed ? "todo-content-finshed" : "todo-content"}>
         <Input.TextArea
           ref={focusRef}
+          disabled={list.length === 0 || list[current] && list[current].finshed}
+          placeholder={list.length === 0 ? '回车添加备忘' : ''}
           onChange={({ target: { value } }) => {
-            // setContent(value);
             const newList = list.map((v, i) => {
               if (i === current) {
                 v.content = value;
@@ -158,23 +164,10 @@ export const TodoList = () => {
             setList(newList);
             store.set(`files`, newList);
           }}
-          value={(list[current]) ? list[current].content : ''}
+          value={list[current] && list[current].content ? list[current].content : ''}
           autoFocus
-        />
+        />}
       </div>
-      {/* <TodoContent
-       content={(list[current]) ? list[current].content : ''}
-       setContent={(value) => {
-        const newList = list.map((v, i) => {
-          if (i === current) {
-            v.content = value;
-          }
-          return v;
-        });
-        setList(newList);
-        store.set(`files`, newList);
-       }} 
-      /> */}
     </div>
   );
 };

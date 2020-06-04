@@ -15,9 +15,39 @@
   padding: 5px;
   cursor: pointer;
 }
+.text {
+  display: flex;
+}
 .current {
-  border: 1px solid green;
+  border: 1px solid #5ead13;
 }
 .finshed {
   text-decoration: line-through;
+}
+.title {
+  padding-left: 10px;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
+}
+
+.todo-content {
+  flex: 1;
+  width: 100% ;
+}
+.todo-content .ant-input {
+  width: 100% !important;
+  height: 100% !important;
+  resize: none;
+  background-color: antiquewhite;
+}
+.todo-content-finshed .ant-input {
+  width: 100% !important;
+  height: 100% !important;
+  resize: none;
+  background-color: #ccc;
+}
+
+.ant-input[disabled] {
+  cursor: initial;
 }
